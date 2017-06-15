@@ -11,8 +11,7 @@ const graphql      = require('graphql');
 const GraphQLHTTP  = require('express-graphql');
 
 
-mongoose.connect('mongodb://localhost/node-scrapper');
-
+mongoose.connect("mongodb://heroku_1gtqrb8j:u2trejk8neo5ogh2m1k368hf1f@ds129462.mlab.com:29462/heroku_1gtqrb8j");
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
