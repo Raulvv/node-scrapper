@@ -46,18 +46,52 @@ module.exports.User.addUser = (root, args) => {
     switch (args.rs.toLowerCase()) {
       case "twitter":
         TwitterScrapperService.scrapUser(args.username).then( (user) => {
-          TwitterUser.create(user, (err, user) => {
-            if (err) {return reject(err)};
-            return resolve(user);
-          })
+          if (user === "Wrong username") {
+    				reject('The username does not exist');
+    			}
+    			let criteria = {username: username};
+
+    			TwitterUser.findOne(criteria).then( (result) => {
+    	      if(result){
+    	        TwitterUser.update(criteria, value, (err, user) => {
+    	  				if (err) { reject(err); }
+
+    	  				resolve(user[0]);
+    	  			});
+    	      }else{
+    	        TwitterUser.create(value, (err, user) => {
+    	  				if (err) { reject(err); }
+
+    	  				resolve(user);
+    	  			});
+    	      }
+    	    });
         })
         break;
       case "instagram":
         InstagramScrapperService.scrapUser(args.username).then( (user) => {
-          InstagramUser.create(user, (err, user) => {
-            if (err) {return reject(err)};
-            return resolve(user);
-          })
+          if (user === "Wrong username") {
+    				res.status(404);
+    				res.json({message: 'The twitter username does not exist'});
+    				return;
+    			}
+    			let criteria = {username: username};
+
+    			InstagramUser.findOne(criteria).then( (result) => {
+    	      if(result){
+    	        InstagramUser.update(criteria, value, (err, user) => {
+    	  				if (err) { reject(err); }
+
+    	  				resolve(user[0]);
+    	  			});
+    	      }else{
+    	        InstagramUser.create(value, (err, user) => {
+    	  				if (err) { reject(err); }
+
+    	  				resolve(user);
+    	  			});
+    	      }
+    	    });
         })
         break;
     }
