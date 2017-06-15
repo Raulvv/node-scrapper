@@ -42,56 +42,31 @@ module.exports.User.getListOfUsers = () => {
 }
 
 module.exports.User.addUser = (root, args) => {
+  let username = args.username;
   return new Promise( (resolve, reject) => {
     switch (args.rs.toLowerCase()) {
       case "twitter":
-        TwitterScrapperService.scrapUser(args.username).then( (user) => {
+        TwitterScrapperService.scrapUser(username).then( (user) => {
           if (user === "Wrong username") {
     				reject('The username does not exist');
     			}
-    			let criteria = {username: username};
+    			let criteria = {};
+          Object.assign(criteria, user);
 
-    			TwitterUser.findOne(criteria).then( (result) => {
-    	      if(result){
-    	        TwitterUser.update(criteria, value, (err, user) => {
-    	  				if (err) { reject(err); }
-
-    	  				resolve(user[0]);
-    	  			});
-    	      }else{
-    	        TwitterUser.create(value, (err, user) => {
-    	  				if (err) { reject(err); }
-
-    	  				resolve(user);
-    	  			});
-    	      }
-    	    });
+          const options = {upsert: true, new: true, setDefaultsOnInsert: true};
+          resolve(TwitterUser.findOneAndUpdate({username}, criteria, options));
         })
         break;
       case "instagram":
-        InstagramScrapperService.scrapUser(args.username).then( (user) => {
+        InstagramScrapperService.scrapUser(username).then( (user) => {
           if (user === "Wrong username") {
-    				res.status(404);
-    				res.json({message: 'The twitter username does not exist'});
-    				return;
+    				reject('The username does not exist');
     			}
-    			let criteria = {username: username};
+    			let criteria = {};
+          Object.assign(criteria, user);
 
-    			InstagramUser.findOne(criteria).then( (result) => {
-    	      if(result){
-    	        InstagramUser.update(criteria, value, (err, user) => {
-    	  				if (err) { reject(err); }
-
-    	  				resolve(user[0]);
-    	  			});
-    	      }else{
-    	        InstagramUser.create(value, (err, user) => {
-    	  				if (err) { reject(err); }
-
-    	  				resolve(user);
-    	  			});
-    	      }
-    	    });
+          const options = {upsert: true, new: true, setDefaultsOnInsert: true};
+          resolve(InstagramUser.findOneAndUpdate({username}, criteria, options));
         })
         break;
     }
