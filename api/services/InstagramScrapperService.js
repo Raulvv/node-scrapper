@@ -29,14 +29,5 @@ module.exports = {
         resolve(stats);
       })
     })
-  },
-
-  scrapBio: (username) => {
-    return new Promise( (resolve, reject) => {
-      xray(`https://www.instagram.com/${username}`, '.ProfileHeaderCard-bio')( (err, bio) => {
-        if (err) {reject(err)}
-        resolve(bio);
-      })
-    })
   }
 }

@@ -9,12 +9,8 @@ const {
 
 const mongoose = require('mongoose');
 
-const UserQueries = require('../models/User/UserQueries');
-// const {
-//   UserQueries,
-//   UserMutations,
-//   UserType
-// } = require('../models/User/UserQL.js');
+const UserQueries  = require('../models/User/UserQueries');
+// const UserMutation = require('../models/User/UserMutation')
 
 let RootQuery = new GraphQLObjectType({
   name: 'Query',
@@ -28,7 +24,7 @@ let RootQuery = new GraphQLObjectType({
 // let RootMutation = new GraphQLObjectType({
 //   name: "Mutation",
 //   fields: () => ({
-//     addUser: UserMutations.addUser,
+//     addUser: UserMutation.addUser,
 //   })
 // });
 
